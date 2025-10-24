@@ -4,14 +4,15 @@ import type { IsoMetadata } from "~/models";
 
 export function meta({ }: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Retrofloof Alpha" },
+    { name: "description", content: "Welcome to your future emulation software!" },
   ];
 }
 
 export default async function Home() {
   const protocol = "retro://launch/";
 
+  // TODO : Handle Full Path properly
   return (
     <div>
       {isoService.isoWithEmulatorList.map((file: Partial<IsoMetadata>) => (

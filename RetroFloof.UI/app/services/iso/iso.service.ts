@@ -17,18 +17,19 @@ class IsoService {
         this.filteredIsoList = [];
 
         const folder = import.meta.env.VITE_RETROARCHISOFOLDER;
-        const filelist = fileService.readFolder(folder);
+        const filelist = fileService.readFolderWithChildren(folder);
         this.isoList = filelist;
         this.filteredIsoList = filelist;
+
         this.isoList.forEach((file) => {
             const isoMetadata = this.identifyIso(file);
-            this.isoWithEmulatorList.push(isoMetadata);
+            isoMetadata && this.isoWithEmulatorList.push({...isoMetadata, fullPath: file[0] ==='C' ? file : folder + file});
         });
 
         console.log("ISO List:", this.isoWithEmulatorList);
     }
 
-    identifyIso(fileName: string): Partial<IsoMetadata> {
+    identifyIso(fileName: string): Partial<IsoMetadata> | undefined {
         const extention = fileName.split('.').pop()?.toLowerCase();
 
         switch (extention) {
@@ -49,8 +50,12 @@ class IsoService {
             case 'iso':
                 console.log("Identifying ISO:", fileName);
                 return this.identifyIsoByIsoHeader(fileName);
+            case 'cue':
+                return { title: fileName, emulator: 'pcsx_rearmed' };
+            case 'bin':
+                break;
             default:
-                return { title: fileName, emulator: 'unknown' };
+                return { title: fileName, emulator: '' };
         }
 
     }
@@ -58,7 +63,11 @@ class IsoService {
     identifyIsoByIsoHeader(fileName: string): Partial<IsoMetadata> {
         const pspMagic = "PSP GAME";
 
-        const gameString = fileService.readFileString(process.env.VITE_RETROARCHISOFOLDER + fileName, 0x8000, 16);
+        // FIXME : Temporary fix for full path issue
+        const filePath = fileName[0] ==='C' ? fileName : process.env.VITE_RETROARCHISOFOLDER + fileName;
+        
+            process.env.VITE_RETROARCHISOFOLDER + fileName, 0x8000, 16
+        const gameString = fileService.readFileString(filePath, 0x8000, 16);
 
         // Simple PSP ISO check: look for "PSP GAME" string at offset 0x8000
         console.log("Game String:", gameString);

@@ -6,4 +6,5 @@ export interface IsoMetadata {
     releaseDate: string;
     genre: string;
     emulator: string;
+    fullPath?: string;
 }
