@@ -23,7 +23,7 @@ class IsoService {
 
         this.isoList.forEach((file) => {
             const isoMetadata = this.identifyIso(file);
-            isoMetadata && this.isoWithEmulatorList.push({...isoMetadata, fullPath: file[0] ==='C' ? file : folder + file});
+            isoMetadata && this.isoWithEmulatorList.push({ ...isoMetadata, fullPath: file[0] === 'C' ? file : folder + file });
         });
 
         console.log("ISO List:", this.isoWithEmulatorList);
@@ -64,9 +64,9 @@ class IsoService {
         const pspMagic = "PSP GAME";
 
         // FIXME : Temporary fix for full path issue
-        const filePath = fileName[0] ==='C' ? fileName : process.env.VITE_RETROARCHISOFOLDER + fileName;
-        
-            process.env.VITE_RETROARCHISOFOLDER + fileName, 0x8000, 16
+        const filePath = fileService.isFullPath(fileName) ? fileName : process.env.VITE_RETROARCHISOFOLDER + fileName;
+
+        process.env.VITE_RETROARCHISOFOLDER + fileName, 0x8000, 16
         const gameString = fileService.readFileString(filePath, 0x8000, 16);
 
         // Simple PSP ISO check: look for "PSP GAME" string at offset 0x8000

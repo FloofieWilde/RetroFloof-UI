@@ -19,7 +19,7 @@ class FileService {
         if (!path) return [];
         const results: string[] = [];
         const items = this.readFolderWithFileTypes(path);
-        
+
         for (const item of items) {
             if (item?.isDirectory()) {
                 // TODO : Handle nested directories
@@ -58,6 +58,10 @@ class FileService {
         // TODO : Handle length = 0 (for reading full file)
         const buffer = this.readFileBuffer(filePath, start, length);
         return buffer.toString('utf-8').replace(/\0/g, ''); // Remove null characters
+    }
+
+    isFullPath(filePath: string): boolean {
+        return pathModule.isAbsolute(filePath);
     }
 }
 

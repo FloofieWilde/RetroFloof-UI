@@ -24,7 +24,7 @@ if ($url -match '^retro://([^/]+)/([^/]+)/(.+)$') {
         # Définir les chemins
         $retroarchPath = "retroarch.exe"
         $corePath      = "$PSScriptRoot\cores\${core}_libretro.dll"
-        $romPath       = "$PSScriptRoot\iso\$rom"
+        $romPath       = "$rom"
         $configPath    = ""
 
         $appendConfig = ""

@@ -17,7 +17,7 @@ export default async function Home() {
     <div>
       {isoService.isoWithEmulatorList.map((file: Partial<IsoMetadata>) => (
         file?.emulator?.length ?
-          <p><a key={file.title} href={protocol + file.emulator + '/' + file.title} target="_blank">{file.title}</a></p>
+          <p><a key={file.title} href={protocol + file.emulator + '/' + file.fullPath} target="_blank">{file.title}</a></p>
           :
           <p key={file.title}>{file.title} (No associated emulator)</p>
       ))}
