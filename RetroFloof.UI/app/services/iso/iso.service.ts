@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { fileService } from "../file/file.service";
 import type { IsoMetadata } from "~/models";
 
@@ -23,7 +22,7 @@ class IsoService {
 
         this.isoList.forEach((file) => {
             const isoMetadata = this.identifyIso(file);
-            isoMetadata && this.isoWithEmulatorList.push({ ...isoMetadata, fullPath: file[0] === 'C' ? file : folder + file });
+            isoMetadata && this.isoWithEmulatorList.push({ ...isoMetadata, fullPath: fileService.getFullPath(file) });
         });
 
         console.log("ISO List:", this.isoWithEmulatorList);
@@ -63,19 +62,16 @@ class IsoService {
     identifyIsoByIsoHeader(fileName: string): Partial<IsoMetadata> {
         const pspMagic = "PSP GAME";
 
-        // FIXME : Temporary fix for full path issue
-        const filePath = fileService.isFullPath(fileName) ? fileName : process.env.VITE_RETROARCHISOFOLDER + fileName;
+        const filePath = fileService.getFullPath(fileName);
 
-        process.env.VITE_RETROARCHISOFOLDER + fileName, 0x8000, 16
         const gameString = fileService.readFileString(filePath, 0x8000, 16);
 
         // Simple PSP ISO check: look for "PSP GAME" string at offset 0x8000
-        console.log("Game String:", gameString);
         if (gameString.includes(pspMagic)) {
             return { title: fileName, emulator: "ppsspp" };
         }
 
-        return { title: fileName, emulator: '' };
+        return { title: fileName, emulator: ''};
     }
 }
 

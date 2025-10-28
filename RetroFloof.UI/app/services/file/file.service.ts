@@ -33,7 +33,7 @@ class FileService {
                     // TODO : Transition to Electron method if integrated
                     const linkedPath = lnkService.getLnkTarget(pathModule.join(path, item.name));
 
-                    if (linkedPath) {
+                    if (linkedPath && fs.existsSync(linkedPath)) {
                         const linkedFiles = this.readFolderWithChildren(linkedPath);
                         const absoluteLinkedPath = linkedFiles.map(f => pathModule.isAbsolute(f) ? f : pathModule.join(linkedPath, f));
                         results.push(...absoluteLinkedPath);
@@ -61,7 +61,12 @@ class FileService {
     }
 
     isFullPath(filePath: string): boolean {
+        console.log("Checking if full path:", filePath, pathModule.isAbsolute(filePath));
         return pathModule.isAbsolute(filePath);
+    }
+
+    getFullPath(fileName: string): string {
+        return this.isFullPath(fileName) ? fileName : process.env.VITE_RETROARCHISOFOLDER + fileName
     }
 }
 
