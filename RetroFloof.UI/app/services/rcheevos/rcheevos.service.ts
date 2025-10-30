@@ -2,11 +2,9 @@ import { buildAuthorization, getUserProfile, getUserRecentlyPlayedGames, type Au
 import { userService } from "../user/user.service";
 
 class RCheevosService {
-    public baseUrl: string = "https://retroachievements.org/API/";
     private authorization: AuthObject | undefined;
 
     constructor() {
-        console.log("Initializing RCheevosService...");
         this.buildAuthorization();
     }
 
@@ -16,8 +14,6 @@ class RCheevosService {
         const webApiKey = import.meta.env.VITE_RETROACHIEVEMENTS_WEBAPIKEY;
 
         this.authorization = buildAuthorization({ username, webApiKey });
-
-        console.log("RCheevos Authorization built for user:", username);
     }
 
     async getUserInfo() {

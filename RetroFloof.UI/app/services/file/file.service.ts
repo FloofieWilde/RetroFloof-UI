@@ -61,7 +61,7 @@ class FileService {
     }
 
     isFullPath(filePath: string): boolean {
-        console.log("Checking if full path:", filePath, pathModule.isAbsolute(filePath));
+        // console.log("Checking if full path:", filePath, pathModule.isAbsolute(filePath));
         return pathModule.isAbsolute(filePath);
     }
 

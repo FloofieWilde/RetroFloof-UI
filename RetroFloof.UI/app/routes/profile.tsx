@@ -1,30 +1,39 @@
 import type { UserProfile, UserRecentlyPlayedGames } from "@retroachievements/api";
 import React, { useEffect, useState } from "react";
 import { rCheevosService } from "~/services/rcheevos/rcheevos.service";
-import { userService } from "~/services/user/user.service";
+import type { Route } from "../+types/root";
 
-const Profile: React.FC = () => {
+export function meta({ }: Route.MetaArgs) {
+  return [
+    { title: "Profile - Retrofloof Alpha" },
+    { name: "description", content: "Welcome to your future emulation software!" },
+  ];
+}
 
-    const [userProfile, setUserProfile] = useState<UserProfile | undefined>(undefined);
-    const [recentlyPlayed, setRecentlyPlayed] = useState<UserRecentlyPlayedGames | undefined>(undefined);
 
-    useEffect(() => {
-        console.log("Fetching user profile and recently played games...");
-        rCheevosService.getUserInfo().then(profile => {
-            setUserProfile(profile);
-        });
-        rCheevosService.recentlyPlayedGames().then((games) => {
-            setRecentlyPlayed(games);
-        });
-    }, [userService.username]);
+export async function loader({ params }: Route.LoaderArgs) {
+  let userInfo = await rCheevosService.getUserInfo();
+  let recentlyPlayed = await rCheevosService.recentlyPlayedGames();
+  return { userInfo, recentlyPlayed };
+}
+
+interface ProfileProps {
+    loaderData: {
+        userInfo: UserProfile;
+        recentlyPlayed: UserRecentlyPlayedGames;
+    };
+}
+
+export default function Profile({ loaderData }: ProfileProps) {
+    const [userProfile, setUserProfile] = useState<UserProfile | undefined>(loaderData.userInfo);
+    const [recentGames, setRecentGames] = useState<UserRecentlyPlayedGames | undefined>(loaderData.recentlyPlayed);
 
     return (
         <div>
             <h1>Hello {userProfile?.user}</h1>
             <p>Welcome to your profile page.</p>
-            { String(userProfile) }
+            { JSON.stringify(userProfile, null, 2) }
+            { JSON.stringify(recentGames, null, 2) }
         </div>
     );
-};
-
-export default Profile;
+}

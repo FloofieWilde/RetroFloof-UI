@@ -25,7 +25,7 @@ class IsoService {
             isoMetadata && this.isoWithEmulatorList.push({ ...isoMetadata, fullPath: fileService.getFullPath(file) });
         });
 
-        console.log("ISO List:", this.isoWithEmulatorList);
+        // console.log("ISO List:", this.isoWithEmulatorList);
     }
 
     identifyIso(fileName: string): Partial<IsoMetadata> | undefined {
@@ -47,7 +47,7 @@ class IsoService {
             case 'nes':
                 return { title: fileName, emulator: '' };
             case 'iso':
-                console.log("Identifying ISO:", fileName);
+                // console.log("Identifying ISO:", fileName);
                 return this.identifyIsoByIsoHeader(fileName);
             case 'cue':
                 return { title: fileName, emulator: 'pcsx_rearmed' };
