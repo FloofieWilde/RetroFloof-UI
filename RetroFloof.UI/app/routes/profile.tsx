@@ -2,6 +2,7 @@ import type { UserProfile, UserRecentlyPlayedGames } from "@retroachievements/ap
 import React, { useEffect, useState } from "react";
 import { rCheevosService } from "~/services/rcheevos/rcheevos.service";
 import type { Route } from "../+types/root";
+import ProfileBanner from "~/components/profile/profile-banner";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -32,6 +33,7 @@ export default function Profile({ loaderData }: ProfileProps) {
         <div>
             <h1>Hello {userProfile?.user}</h1>
             <p>Welcome to your profile page.</p>
+            <ProfileBanner profile={userProfile!} />
             { JSON.stringify(userProfile, null, 2) }
             { JSON.stringify(recentGames, null, 2) }
         </div>
